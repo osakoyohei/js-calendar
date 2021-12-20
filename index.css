@@ -1,3 +1,23 @@
-body {
+/*全体*/
+.wrapper {
     text-align: center;
+}
+
+/* カレンダー */
+table {
+    outline: 2px solid #ddd;
+    border-collapse: collapse;
+    margin: 20px auto;
+    width: 50%;
+    text-align: center;
+}
+th, td {
+    outline: 1px solid #ddd;
+    padding: 10px 5px;
+    text-align: center;
+}
+
+/* 前後月の日付 */
+td.disabled {
+    color: #ccc;
 }

@@ -20,26 +20,26 @@ th, td {
 }
 
 /* 祝日 */
-td.holiday{
+/* td.holiday{
     color: red;
-}
+} */
 
 /* 日曜日 */
-td:first-child {
+/* td:first-child {
     color: red;
-}
+} */
 
 /* 土曜日 */
-td:last-child {
+/* td:last-child {
     color: blue;
-}
+} */
 
 /* 本日 */
-td.today {
+/* td.today {
     background-color: #FF4F02
     ;
     color: #fff;
-}
+} */
 
 /* 前後月の日付 */
 td.disabled {

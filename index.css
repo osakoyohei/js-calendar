@@ -8,13 +8,37 @@ table {
     outline: 2px solid #ddd;
     border-collapse: collapse;
     margin: 20px auto;
-    width: 50%;
+    width: 70%;
     text-align: center;
 }
+
 th, td {
     outline: 1px solid #ddd;
-    padding: 10px 5px;
+    padding: 30px 10px;
     text-align: center;
+    font-size: 24px;
+}
+
+/* 祝日 */
+td.holiday{
+    color: red;
+}
+
+/* 日曜日 */
+td:first-child {
+    color: red;
+}
+
+/* 土曜日 */
+td:last-child {
+    color: blue;
+}
+
+/* 本日 */
+td.today {
+    background-color: #FF4F02
+    ;
+    color: #fff;
 }
 
 /* 前後月の日付 */

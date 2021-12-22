@@ -21,7 +21,7 @@ function next() {
     showProcess(showDate);
 }
 
-// カレンダー表示
+// カレンダー年月表示
 function showProcess(date) {
     var year = date.getFullYear();
     var month = date.getMonth();
@@ -29,7 +29,7 @@ function showProcess(date) {
 
     // 2050年まで表示可能
     const nextButton = document.querySelector('#next');
-    if (year === 2050 && month+1 === 12) {
+    if (year == 2050 && (month+1) == 12) {
         nextButton.disabled = true;
     } else {
         nextButton.disabled = false;
@@ -76,12 +76,11 @@ function createProcess(year, month) {
                 count++;
                 calendar += "<td class='disabled'>" + (count - endDate) + "</td>";
             } else {
-                // 当月の日付を曜日に照らし合わせて設定
                 count++;
                 if(year == today.getFullYear()
                   && month == (today.getMonth())
                   && count == today.getDate()){
-                    calendar += "<td>" + count + "</td>";
+                    calendar += "<td class='today'>" + count + "</td>";
                 } else {
                     calendar += "<td>" + count + "</td>";
                 }
@@ -90,4 +89,11 @@ function createProcess(year, month) {
         calendar += "</tr>";
     }
     return calendar;
+}
+
+// 祝日（API）
+async function holidaysApi() {
+    const res = await fetch("https://holidays-jp.github.io/api/v1/date.json");
+    const holidays = await res.json();
+    console.log(holidays);
 }

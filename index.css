@@ -7,17 +7,18 @@
 table {
     outline: 2px solid #ddd;
     border-collapse: collapse;
-    margin: 30px auto;
-    width: 60%;
-    height: 100%;
+    margin: 20px auto;
+    width: 50%;
     text-align: center;
     table-layout: fixed;
 }
 
+/* 曜日,日付 */
 th, td {
     outline: 1px solid #ddd;
     text-align: center;
-    height: 100px;
+    width: 50px;
+    height: 80px;
     font-size: 15px;
 }
 
@@ -30,7 +31,3 @@ td.holiday{
 td.disabled {
     color: #ccc;
 }
-
-/* .holiday-name {
-    font-size: 15px;
-} */

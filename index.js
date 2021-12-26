@@ -1,8 +1,9 @@
+//　1週間（月曜〜日曜）
 const week = ["月", "火", "水", "木", "金", "土", "日"];
 // 現在の日付、時刻を取得
 const today = new Date();
 // 現在の年月の1日目を取得
-var showDate = new Date(today.getFullYear(), today.getMonth(), 1);
+const showDate = new Date(today.getFullYear(), today.getMonth(), 1);
 
 //　初期表示
 window.onload = function () {
@@ -29,8 +30,8 @@ function next() {
 
 // カレンダー年月表示
 function showProcess(date) {
-    const year = date.getFullYear();
-    const month = date.getMonth();
+    var year = date.getFullYear();
+    var month = date.getMonth();
     document.querySelector('#header').innerHTML = year + "年 " + (month + 1) + "月";
 
     // 2050年まで表示可能
@@ -67,11 +68,9 @@ function createProcess(year, month) {
     var endDate = new Date(year, month + 1, 0).getDate();
     // 表示する先月の末日
     var lastMonthEndDate = new Date(year, month, 0).getDate();
-    //　カレンダー（日付部分）の行数
-    var row = Math.ceil((startDayOfWeek + endDate) / week.length);
 
     // 1行ずつ設定
-    for (var i = 0; i < row; i++) {
+    for (var i = 0; i < 6; i++) {
         calendar += "<tr>";
         for (var j = 0; j < week.length; j++) {
             if (i == 0 && j < startDayOfWeek) {
@@ -83,10 +82,12 @@ function createProcess(year, month) {
                 calendar += "<td class='disabled'>" + (count - endDate) + "日" + "</td>";
             } else {
                 count++;
-                var dateInfo = checkDate(year, month, count);
+                var dateInfo = checkDateHoliday(year, month, count);
                 if(dateInfo.isHoliday) {
+                    // 祝日の日付を設定
                     calendar += "<td class='holiday'>" + count + "日" + "<br>" + "<span class='holiday-name'>" + dateInfo.holidayName + "</span>"+ "</td>";
                 } else {
+                    // 平日の日付を設定
                     calendar += "<td>" + count + "日" + "</td>";
                 }
             }
@@ -96,8 +97,8 @@ function createProcess(year, month) {
     return calendar;
 }
 
-// 日付チェック
-function checkDate(year, month, day) {
+// 祝日をチェック
+function checkDateHoliday(year, month, day) {
     var checkHoliday = isHoliday(year, month, day);
     return {
         isHoliday: checkHoliday[0],
@@ -105,11 +106,11 @@ function checkDate(year, month, day) {
     };
 }
 
-// 祝日かどうか
+// 祝日を取得
 function isHoliday(year, month, day) {
     var checkDate = year + '-' + ('0'+(month+1)).slice(-2) + '-' + ('0'+day).slice(-2);
     var dateList = request.responseText.split('\n');
-    
+
     for (var i = 1; i < dateList.length; i++) {
         if (dateList[i].split(',')[0] === checkDate) {
             return [true, dateList[i].split(',')[1]];

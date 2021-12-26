@@ -4,9 +4,15 @@ const today = new Date();
 // 現在の年月の1日目を取得
 var showDate = new Date(today.getFullYear(), today.getMonth(), 1);
 
-// 初期表示
+//　初期表示
 window.onload = function () {
-    showProcess(today, calendar);
+    // 祝日API取得
+    request = new XMLHttpRequest();
+    request.open('get', 'https://holidays-jp.github.io/api/v1/date.csv', true);
+    request.send(null);
+    request.onload = function () {
+        showProcess(today, calendar);
+    };
 };
 
 // 前の月表示
@@ -23,8 +29,8 @@ function next() {
 
 // カレンダー年月表示
 function showProcess(date) {
-    var year = date.getFullYear();
-    var month = date.getMonth();
+    const year = date.getFullYear();
+    const month = date.getMonth();
     document.querySelector('#header').innerHTML = year + "年 " + (month + 1) + "月";
 
     // 2050年まで表示可能
@@ -69,20 +75,19 @@ function createProcess(year, month) {
         calendar += "<tr>";
         for (var j = 0; j < week.length; j++) {
             if (i == 0 && j < startDayOfWeek) {
-                // 1行目で先月の最終日までの日付を設定
-                calendar += "<td class='disabled'>" + (lastMonthEndDate - startDayOfWeek + j + 1) + "</td>";
+            // 1行目で先月の最終日までの日付を設定
+            calendar += "<td class='disabled'>" + (lastMonthEndDate - startDayOfWeek + j + 1) + "日" + "</td>";
             } else if (count >= endDate) {
                 // 最終行で最終日以降の翌月の日付を設定
                 count++;
-                calendar += "<td class='disabled'>" + (count - endDate) + "</td>";
+                calendar += "<td class='disabled'>" + (count - endDate) + "日" + "</td>";
             } else {
                 count++;
-                if(year == today.getFullYear()
-                  && month == (today.getMonth())
-                  && count == today.getDate()){
-                    calendar += "<td class='today'>" + count + "</td>";
+                var dateInfo = checkDate(year, month, count);
+                if(dateInfo.isHoliday) {
+                    calendar += "<td class='holiday'>" + count + "日" + "<br>" + "<span class='holiday-name'>" + dateInfo.holidayName + "</span>"+ "</td>";
                 } else {
-                    calendar += "<td>" + count + "</td>";
+                    calendar += "<td>" + count + "日" + "</td>";
                 }
             }
         }
@@ -91,9 +96,24 @@ function createProcess(year, month) {
     return calendar;
 }
 
-// 祝日（API）
-async function holidaysApi() {
-    const res = await fetch("https://holidays-jp.github.io/api/v1/date.json");
-    const holidays = await res.json();
-    console.log(holidays);
+// 日付チェック
+function checkDate(year, month, day) {
+    var checkHoliday = isHoliday(year, month, day);
+    return {
+        isHoliday: checkHoliday[0],
+        holidayName: checkHoliday[1],
+    };
+}
+
+// 祝日かどうか
+function isHoliday(year, month, day) {
+    var checkDate = year + '-' + ('0'+(month+1)).slice(-2) + '-' + ('0'+day).slice(-2);
+    var dateList = request.responseText.split('\n');
+    
+    for (var i = 1; i < dateList.length; i++) {
+        if (dateList[i].split(',')[0] === checkDate) {
+            return [true, dateList[i].split(',')[1]];
+        }
+    }
+    return [false, ""];
 }
